@@ -1,12 +1,12 @@
 class FlatsController < ApplicationController
   before_action :set_flat, only: %i[ show edit update destroy ]
 
-  # GET /flats or /flats.json
+  # GET /flats
   def index
     @flats = Flat.all
   end
 
-  # GET /flats/1 or /flats/1.json
+  # GET /flats/1
   def show
   end
 
@@ -19,42 +19,30 @@ class FlatsController < ApplicationController
   def edit
   end
 
-  # POST /flats or /flats.json
+  # POST /flats
   def create
     @flat = Flat.new(flat_params)
 
-    respond_to do |format|
-      if @flat.save
-        format.html { redirect_to flat_url(@flat), notice: "Flat was successfully created." }
-        format.json { render :show, status: :created, location: @flat }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @flat.errors, status: :unprocessable_entity }
-      end
+    if @flat.save
+      redirect_to @flat, notice: "Flat was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /flats/1 or /flats/1.json
+  # PATCH/PUT /flats/1
   def update
-    respond_to do |format|
-      if @flat.update(flat_params)
-        format.html { redirect_to flat_url(@flat), notice: "Flat was successfully updated." }
-        format.json { render :show, status: :ok, location: @flat }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @flat.errors, status: :unprocessable_entity }
-      end
+    if @flat.update(flat_params)
+      redirect_to @flat, notice: "Flat was successfully updated.", status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /flats/1 or /flats/1.json
+  # DELETE /flats/1
   def destroy
     @flat.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to flats_url, notice: "Flat was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to flats_url, notice: "Flat was successfully destroyed.", status: :see_other
   end
 
   private
