@@ -4,6 +4,16 @@ class FlatsController < ApplicationController
   # GET /flats
   def index
     @flats = Flat.all
+
+    # @flats.geocoded filters only the flats with coordinates
+    @markers = @flats.geocoded.map do |flat|
+      {
+        lat: flat.latitude,
+        lng: flat.longitude,
+        popup_html: render_to_string(partial: 'flats/popup', locals: { flat: flat }),
+        marker_html: render_to_string(partial: 'flats/marker', locals: { flat: flat }),
+      }
+    end
   end
 
   # GET /flats/1
